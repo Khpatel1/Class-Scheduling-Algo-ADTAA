@@ -292,6 +292,7 @@ public class Timetable {
 		}
 
 		for (Class classA : this.classes) {
+			// get current prof assigned to check for overlaps
 
 			// if professor is in HashMap update count
 

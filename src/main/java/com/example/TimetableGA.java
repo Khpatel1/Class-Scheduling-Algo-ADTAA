@@ -91,8 +91,6 @@ public class TimetableGA {
         }
 
         // print instructor classes check
-        HashMap<Integer, Professor> professors = timetable.getProfessors();
-
         Professor[] professor = timetable.getProfessorsAsArray();
         for (int i = 0; i < professor.length; i++) {
             System.out.println(String.format("Name: %s, Max: %d, Current: %d", professor[i].getProfessorName(),
@@ -190,6 +188,7 @@ public class TimetableGA {
                 new int[] { 1630, 1720 });
 
         checkOverlaps(ts);
+        removeId(ts);
 
         // set up timeslots
         for (Timeslot ts1 : ts) {
@@ -480,6 +479,25 @@ public class TimetableGA {
             }
             ts1.avoid = removeDups(ts1.avoid);
 
+        }
+    }
+
+    public static void removeId(Timeslot[] ts) {
+        for (Timeslot ts1 : ts) {
+            int toRemove = ts1.getTimeslotId();
+            if (ts1.avoid.length == 1) {
+                ts1.avoid = null;
+            } else {
+                int[] temp = new int[ts1.avoid.length - 1];
+                int tempIdx = 0;
+                for (int i = 0; i < ts1.avoid.length; i++) {
+                    if (ts1.avoid[i] != toRemove) {
+                        temp[tempIdx] = ts1.avoid[i];
+                        tempIdx++;
+                    }
+                }
+                ts1.avoid = temp;
+            }
         }
     }
 }
