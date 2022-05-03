@@ -50,7 +50,7 @@ public class TimetableGA {
         int generation = 1;
 
         // Start evolution loop
-        while (ga.isTerminationConditionMet(generation, 750) == false
+        while (ga.isTerminationConditionMet(generation, 50) == false
                 && ga.isTerminationConditionMet(population) == false) {
             // Print fitness
             System.out.println("G" + generation + " Best fitness: " + population.getFittest(1).getFitness());
@@ -178,31 +178,47 @@ public class TimetableGA {
         timetable.addRoom(1, "A1", 100);
         timetable.addRoom(2, "B1", 100);
 
-        // Set up timeslots
-        timetable.addTimeslot(1, "MW 8:00 - 9:15", new int[] { 800, 915 }, new int[] {}, new int[] { 800, 915 },
-                new int[] {}, new int[] {});
-        timetable.addTimeslot(2, "MW 9:15 - 10:30", new int[] { 915, 1030 }, new int[] {}, new int[] { 915, 1030 },
-                new int[] {}, new int[] {});
-        timetable.addTimeslot(3, "MW 9:15 - 10:30", new int[] { 1015, 1145 }, new int[] {}, new int[] { 1015, 1145 },
-                new int[] {}, new int[] {});
-        // timetable.addTimeslot(3, "MW 10:30 - 11:45");
-        timetable.addTimeslot(4, "MW 11:45 - 13:00");
-        timetable.addTimeslot(5, "MW 13:00 - 14:15");
-        timetable.addTimeslot(6, "MW 14:25 - 15:30");
-        timetable.addTimeslot(7, "MW 15:30 - 16:45");
-        timetable.addTimeslot(8, "MW 16:45 - 18:00");
-        timetable.addTimeslot(9, "MW 18:00 - 19:15");
-        timetable.addTimeslot(10, "TTR 8:00 - 9:15");
-        timetable.addTimeslot(11, "TTR 9:15 - 10:30");
-        timetable.addTimeslot(12, "TTR 10:30 - 11:45");
-        timetable.addTimeslot(13, "TTR 11:45 - 13:00");
-        timetable.addTimeslot(14, "TTR 13:00 - 14:15");
-        timetable.addTimeslot(15, "TTR 14:25 - 15:30");
-        timetable.addTimeslot(16, "TTR 15:30 - 16:45");
-        timetable.addTimeslot(17, "TTR 16:45 - 18:00");
-        timetable.addTimeslot(18, "TTR 18:00 - 19:15");
-        timetable.addTimeslot(19, "TTR 8:00 - 10:30");
-        timetable.addTimeslot(20, "TTR 10:30 - 13:00");
+        Timeslot[] ts = new Timeslot[16];
+        ts[0] = new Timeslot(1, "T,TR: 9:25 - 10:40", null, new int[] { 925, 1040 }, null, new int[] { 925, 1040 },
+                null);
+        ts[1] = new Timeslot(2, "M,W: 12:15 - 13:30", new int[] { 925, 1040 }, null, new int[] { 925, 1040 }, null,
+                null);
+        ts[2] = new Timeslot(3, "T,Th: 17:55 - 19:10", null, new int[] { 1755, 1910 }, null, new int[] { 1755, 1910 },
+                null);
+        ts[3] = new Timeslot(4, "M,W,F: 9:25 - 10:15", new int[] { 925, 1015 }, null, new int[] { 925, 1015 }, null,
+                new int[] { 925, 1015 });
+        ts[4] = new Timeslot(5, "M,F,W: 12:15 - 13:05", new int[] { 1215, 1305 }, null, new int[] { 1215, 1305 }, null,
+                new int[] { 1215, 1305 });
+        ts[5] = new Timeslot(6, "T,TR: 8:00 - 9:15", null, new int[] { 800, 915 }, null, new int[] { 900, 915 }, null);
+        ts[6] = new Timeslot(7, "M,W: 8:00 - 915", new int[] { 800, 915 }, null, new int[] { 800, 915 }, null, null);
+        ts[7] = new Timeslot(8, "M,W: 9:25 - 10:40", new int[] { 925, 1040 }, null, new int[] { 925, 1040 }, null,
+                null);
+        ts[8] = new Timeslot(9, "T, TR: 12:15 - 13:30", null, new int[] { 1215, 1330 }, null, new int[] { 1215, 1330 },
+                null);
+        ts[9] = new Timeslot(10, "M,W: 10:50 - 11:55", new int[] { 1050, 1155 }, null, new int[] { 1050, 1155 }, null,
+                null);
+        ts[10] = new Timeslot(11, "T,TR: 10:50 - 11:55", null, new int[] { 1050, 1155 }, null, new int[] { 1050, 1155 },
+                null);
+        ts[11] = new Timeslot(12, "T,TR: 10:55 - 11:55", null, new int[] { 1055, 1155 }, null, new int[] { 1055, 1155 },
+                null);
+        ts[12] = new Timeslot(13, "M,W,F: 10:50 - 11:40", new int[] { 1050, 1140 }, null, new int[] { 1050, 1140 },
+                null, new int[] { 1050, 1140 });
+        ts[13] = new Timeslot(14, "M,W: 10:55 - 11:55", new int[] { 1055, 1155 }, null, new int[] { 1055, 1155 }, null,
+                null);
+        ts[14] = new Timeslot(15, "M,W,F: 8:00 - 8:50", new int[] { 800, 850 }, null, new int[] { 800, 850 }, null,
+                new int[] { 800, 850 });
+        ts[15] = new Timeslot(16, "M,W,F: 16:30 - 17:20", new int[] { 1630, 1720 }, null, new int[] { 1630, 1720 },
+                null,
+                new int[] { 1630, 1720 });
+
+        checkOverlaps(ts);
+
+        // set up timeslots
+        for (Timeslot ts1 : ts) {
+            System.out.print(ts1.getTimeslotId() + "   ");
+            ts1.printAvoid();
+            timetable.addTimeslot(ts1);
+        }
 
         // Set up professors
         for (int i = 0; i < numInstructors; i++) {

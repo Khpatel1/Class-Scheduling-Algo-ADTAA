@@ -114,6 +114,10 @@ public class Timetable {
 		this.timeslots.put(timeslotId, new Timeslot(timeslotId, timeslot, m, t, w, th, f));
 	}
 
+	public void addTimeslot(Timeslot ts) {
+		this.timeslots.put(ts.getTimeslotId(), ts);
+	}
+
 	public void createClasses(Individual individual) {
 		// Init classes
 		Class classes[] = new Class[this.getNumClasses()];
