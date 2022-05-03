@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.util.JSON;
 
 import org.bson.Document;
 
@@ -166,7 +168,7 @@ public class TimetableGA {
         ts[4] = new Timeslot(5, "M,F,W: 12:15 - 13:05", new int[] { 1215, 1305 }, null, new int[] { 1215, 1305 }, null,
                 new int[] { 1215, 1305 });
         ts[5] = new Timeslot(6, "T,TR: 8:00 - 9:15", null, new int[] { 800, 915 }, null, new int[] { 900, 915 }, null);
-        ts[6] = new Timeslot(7, "M,W: 8:00 - 915", new int[] { 800, 915 }, null, new int[] { 800, 915 }, null, null);
+        ts[6] = new Timeslot(7, "M,W: 8:00 - 9:15", new int[] { 800, 915 }, null, new int[] { 800, 915 }, null, null);
         ts[7] = new Timeslot(8, "M,W: 9:25 - 10:40", new int[] { 925, 1040 }, null, new int[] { 925, 1040 }, null,
                 null);
         ts[8] = new Timeslot(9, "T, TR: 12:15 - 13:30", null, new int[] { 1215, 1330 }, null, new int[] { 1215, 1330 },

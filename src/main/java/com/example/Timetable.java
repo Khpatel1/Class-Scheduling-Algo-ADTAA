@@ -293,6 +293,22 @@ public class Timetable {
 
 		for (Class classA : this.classes) {
 			// get current prof assigned to check for overlaps
+			for (Class classb : this.classes) {
+				if (classb.getProfessorId() == classA.getProfessorId()) {
+					Timeslot ts1 = this.getTimeslot(classA.getTimeslotId());
+					int ts2Id = classb.getTimeslotId();
+					if (ts1.avoid == null) {
+						break;
+					} else {
+						for (int i = 0; i < ts1.avoid.length; i++) {
+							if (ts1.avoid[i] == ts2Id) {
+								clashes++;
+								break;
+							}
+						}
+					}
+				}
+			}
 
 			// if professor is in HashMap update count
 
