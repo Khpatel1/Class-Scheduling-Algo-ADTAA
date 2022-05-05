@@ -229,6 +229,17 @@ public class Timetable {
 		return (Group[]) this.groups.values().toArray(new Group[this.groups.size()]);
 	}
 
+	public int[] getModuleIds() {
+		Module[] mods = this.modules.values().toArray(new Module[this.modules.size()]);
+		int[] temp = new int[this.modules.size()];
+		int idx = 0;
+		for (Module m : mods) {
+			temp[idx] = m.getModuleId();
+			idx++;
+		}
+		return temp;
+	}
+
 	public Professor[] getProfessorsAsArray() {
 		return (Professor[]) this.professors.values().toArray(new Professor[this.professors.size()]);
 	}

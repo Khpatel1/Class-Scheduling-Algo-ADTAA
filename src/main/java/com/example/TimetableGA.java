@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
 
 import org.bson.Document;
 
@@ -30,7 +28,7 @@ public class TimetableGA {
         int generation = 1;
 
         // Start evolution loop
-        while (ga.isTerminationConditionMet(generation, 50) == false
+        while (ga.isTerminationConditionMet(generation, 1000) == false
                 && ga.isTerminationConditionMet(population) == false) {
             // Print fitness
             System.out.println("G" + generation + " Best fitness: " + population.getFittest(1).getFitness());
@@ -55,7 +53,7 @@ public class TimetableGA {
         System.out.println("Final solution fitness: " + population.getFittest(0).getFitness());
         System.out.println("Clashes: " + timetable.calcClashes(timetable));
 
-        DBconnection.db.getCollection("schedules").deleteMany(new Document());
+        DBconnection.db_schedule.deleteMany(new Document());
 
         // Print classes
         System.out.println();
@@ -192,10 +190,14 @@ public class TimetableGA {
         checkOverlaps(ts);
         removeId(ts);
 
+        DBconnection.db_timeslots.deleteMany(new Document());
         // set up timeslots
         for (Timeslot ts1 : ts) {
             System.out.print(ts1.getTimeslotId() + "  " + ts1.getTimeslot() + "   ");
             ts1.printAvoid();
+            String json = gson.toJson(ts1);
+            Document doc = Document.parse(json);
+            DBconnection.db_timeslots.insertOne(doc);
             timetable.addTimeslot(ts1);
         }
 
@@ -217,7 +219,9 @@ public class TimetableGA {
         }
 
         // Set up student groups and the modules they take.
-        timetable.addGroup(1, 10, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
+
+        // @TODO change int[] input to variable from database
+        timetable.addGroup(1, 10, timetable.getModuleIds());
         return timetable;
     }
 
