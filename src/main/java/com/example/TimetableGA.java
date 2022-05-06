@@ -6,8 +6,12 @@ import java.util.HashMap;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class TimetableGA {
 
@@ -59,6 +63,7 @@ public class TimetableGA {
         System.out.println();
         Class classes[] = timetable.getClasses();
         int classIndex = 1;
+        Gson gson = new Gson();
         for (int i = 0; i < classes.length; i++) {
             System.out.println("Class " + classIndex + ":");
             System.out.println("crn: " +
@@ -79,13 +84,28 @@ public class TimetableGA {
                     timetable.getTimeslot(classes[i].getTimeslotId()).getTimeslot());
             System.out.println("-----");
 
-            Document doc = new Document();
-            doc.append("classID", classIndex);
-            doc.append("crn", timetable.getModule(classes[i].getModuleId()).getModuleCode());
-            doc.append("courseTitle", timetable.getModule(classes[i].getModuleId()).getModuleName());
-            doc.append("instructor", timetable.getProfessor(classes[i].getProfessorId()).getProfessorName());
-            doc.append("scheduledTime", timetable.getTimeslot(classes[i].getTimeslotId()).getTimeslot());
-            DBconnection.db.getCollection("schedules").insertOne(doc);
+            Schedule s1 = new Schedule(classIndex, timetable.getModule(classes[i].getModuleId()).getModuleCode(),
+                    timetable.getModule(classes[i].getModuleId()).getModuleName(),
+                    timetable.getProfessor(classes[i].getProfessorId()).getProfessorName(),
+                    timetable.getTimeslot(classes[i].getTimeslotId()).getTimeslot());
+
+            String json = gson.toJson(s1);
+            Document doc = Document.parse(json);
+            DBconnection.db_schedule.insertOne(doc);
+
+            /*
+             * Document doc = new Document();
+             * doc.append("classID", classIndex);
+             * doc.append("crn",
+             * timetable.getModule(classes[i].getModuleId()).getModuleCode());
+             * doc.append("courseTitle",
+             * timetable.getModule(classes[i].getModuleId()).getModuleName());
+             * doc.append("instructor",
+             * timetable.getProfessor(classes[i].getProfessorId()).getProfessorName());
+             * doc.append("scheduledTime",
+             * timetable.getTimeslot(classes[i].getTimeslotId()).getTimeslot());
+             * DBconnection.db.getCollection("schedules").insertOne(doc);
+             */
 
             classIndex++;
         }
@@ -99,6 +119,11 @@ public class TimetableGA {
                 System.out.println("*ALERT*");
             }
             System.out.println("---------------");
+
+            Document query = new Document("lastName", professor[i].getProfessorName());
+            Bson updates = Updates.set("assignedClasses", professor[i].getNumAssigned());
+            UpdateOptions options = new UpdateOptions().upsert(true);
+            UpdateResult result = DBconnection.db_instructors.updateOne(query, updates, options);
 
         }
 
